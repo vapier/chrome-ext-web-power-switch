@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "minimum_chrome_version": "22",
   "name": "Web Power Switch Manager",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Quickly control Web Power Switches",
   "icons": {
     "128": "images/outlet-128x128.png"

@@ -14,7 +14,8 @@ function fetchpage(url, callback) {
 					callback(xhr, state);
 				} else {
 					xhr.setstatus = true;
-					setstatus('Could not connect; check settings');
+					setstatus('Could not connect;<br>check your ' +
+					          '<a href="' + chrome.extension.getURL('options.html') + '" target=_blank>settings</a>');
 					console.log('connect error', state);
 				}
 			}
@@ -126,7 +127,7 @@ function initpopup(xhr, state) {
 
 function setstatus(msg) {
 	var status = document.getElementById('status');
-	status.innerText = msg;
+	status.innerHTML = msg;
 	status.style.visibility = msg ? '' : 'hidden';
 	status.style.float      = msg ? '' : 'left';
 	status.style.position   = msg ? '' : 'absolute';
