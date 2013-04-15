@@ -89,6 +89,31 @@ function initpopup(xhr, state) {
 	// There is no clean API for extracting the current state.
 	// Example result:
 	/*
+		<tr>
+		<th bgcolor="#DDDDFF" align=left>
+		Controller: !!!Web Power Switch 6
+		</th>
+		</tr>
+	*/
+
+	var th, ths = state.currentTarget.responseXML.querySelectorAll('th');
+	for (var i = 0; th = ths[i]; ++i) {
+		if (th.bgColor != '#DDDDFF')
+			continue;
+
+		var controller_name = trim(th.innerText);
+		if (controller_name.slice(0, 12) != 'Controller: ')
+			continue;
+
+		row = tbl.insertRow(-1);
+		cell = row.insertCell(-1);
+		cell.colSpan = 2;
+		cell.align = 'center';
+		cell.innerText = controller_name.slice(12);
+		cell.innerHTML = '<a href="' + url_base + '" target="_blank">' + cell.innerHTML + '</a>'
+	}
+
+	/*
 		<tr bgcolor="#F4F4F4"><td align=center>1</td>
 		<td>Outlet 1</td><td>
 		<b><font color=red>OFF</font></b></td><td>
