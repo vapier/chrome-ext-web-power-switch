@@ -136,7 +136,10 @@ function initpopup(xhr, state) {
 
 		row = tbl.insertRow(-1);
 		cell = row.insertCell(-1);
-		cell.innerText = outlet_name + ':';
+		if (outlet_name === '')
+			cell.innerHTML = '<i>unnamed</i>';
+		else
+			cell.innerText = outlet_name + ':';
 		cell = row.insertCell(-1);
 		button = document.createElement('input');
 		button.type = 'button';
