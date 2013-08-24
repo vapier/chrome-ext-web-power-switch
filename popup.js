@@ -166,6 +166,15 @@ document.addEventListener('DOMContentLoaded', function() {
 		url_base = settings['url'] || settings_defaults['url'];
 		user = settings['user'] || settings_defaults['user'];
 		pass = settings['pass'] || settings_defaults['pass'];
-		fetchpage('index.htm', initpopup);
+		chrome.permissions.contains({
+			origins: [url_base + '/*']
+		}, function(granted) {
+			if (granted)
+				fetchpage('index.htm', initpopup);
+			else
+				setstatus('Missing permissions;<br>please visit the ' +
+				          '<a href="' + chrome.extension.getURL('options.html') + '" target=_blank>settings page</a>' +
+				          '<br>to grant access.');
+		});
 	});
 });
