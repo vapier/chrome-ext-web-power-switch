@@ -169,12 +169,21 @@ document.addEventListener('DOMContentLoaded', function() {
 		chrome.permissions.contains({
 			origins: [url_base + '/*']
 		}, function(granted) {
-			if (granted)
+			if (granted) {
 				fetchpage('index.htm', initpopup);
-			else
-				setstatus('Missing permissions;<br>please visit the ' +
-				          '<a href="' + chrome.extension.getURL('options.html') + '" target=_blank>settings page</a>' +
-				          '<br>to grant access.');
+			} else {
+				setstatus(
+					'Missing permissions;<br>please visit the ' +
+					'<a href="' + chrome.extension.getURL('options.html') + '" target=_blank>settings page</a>' +
+					'<br>to grant access.<br>' +
+					'<center><input id=retry type=submit value=Retry></center>'
+				);
+				// Work around http://crbug.com/125706.
+				document.getElementById('retry').onclick = function() {
+					chrome.permissions.request({origins: [url_base + '/*']});
+					fetchpage('index.htm', initpopup);
+				};
+			}
 		});
 	});
 });
