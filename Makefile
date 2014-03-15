@@ -1,4 +1,5 @@
 CLOSURE = closure-compiler --language_in ECMASCRIPT5
+YUICOMPRESSOR = yuicompressor
 
 all:
 
@@ -8,6 +9,15 @@ all:
 JS_FILES = $(shell grep '[.]js$$' manifest.files)
 js-min: $(JS_FILES:=.min)
 
-check: js-min
+%.css.min: %.css
+	$(YUICOMPRESSOR) $< > $@
 
-.PHONY: all clean check js-min
+CSS_FILES = $(shell grep '[.]css$$' manifest.files)
+css-min: $(CSS_FILES:=.min)
+
+check: css-min js-min
+
+dist:
+	./makedist.sh
+
+.PHONY: all clean check css-min dist js-min

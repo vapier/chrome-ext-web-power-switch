@@ -32,10 +32,10 @@ while read line ; do
 done < <(sed 's:#.*::' manifest.files)
 cp Makefile manifest.files manifest.json "${P}/"
 
-make -C "${P}" -j js-min
+make -C "${P}" -j {css,js}-min
 while read line ; do
 	mv "${line}.min" "${line}"
-done < <(find "${P}" -name '*.js')
+done < <(find "${P}" -name '*.js' -o -name '*.css')
 rm "${P}"/{manifest.files,Makefile}
 
 sed -i \
@@ -43,6 +43,7 @@ sed -i \
   "${P}/manifest.json"
 
 zip="${P}.zip"
+rm -f "${zip}"
 zip -r "${zip}" "${P}"
 rm -rf "${P}"
 du -b "${zip}"
