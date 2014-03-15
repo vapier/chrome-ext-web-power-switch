@@ -1,0 +1,4 @@
+[submodule "chrome-bootstrap"]
+	path = chrome-bootstrap
+	url = https://github.com/roykolak/chrome-bootstrap.git
+	branch = tags/v1.2.1

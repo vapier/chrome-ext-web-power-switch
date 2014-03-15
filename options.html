@@ -4,25 +4,63 @@
 
 <head>
 <title>Web Power Switch Manager Options</title>
+<link rel="stylesheet" type="text/css" href="chrome-bootstrap/chrome-bootstrap.css" />
 <script src='common.js'></script>
 <script src='options.js'></script>
 </head>
 
-<body background='images/outlet.svg'>
+<body class="chrome-bootstrap">
+  <div class="frame">
+
+    <div class="navigation">
+      <h1><a href="#">Web Power Switch</a></h1>
+      <ul class="menu">
+        <li class="selected">
+          <a href="#options">Options</a>
+        </li>
+      </ul>
+      <ul>
+        <li>&nbsp;<img src='images/outlet-128x128.png'></li>
+      </ul>
+    </div>
+
+    <div class="mainview view">
+      <div id="options" class="selected">
+        <header>
+          <h1>Options</h1>
+        </header>
+        <div class="content">
+
+<section>
+ <h3>Connection</h3>
+
 <table>
 <tr>
- <td>URL:</td><td><input type='text' id='url'></td>
+ <td>URL:</td><td><input type='text' id='url' size=50></td>
 </tr>
 <tr>
- <td>User:</td><td><input type='text' id='user'></td>
+ <td>User:</td><td><input type='text' id='user' size=50></td>
 </tr>
 <tr>
- <td>Pass:</td><td><input type='text' id='pass'></td>
-</tr>
-<tr>
- <td colspan=2 align=center><input type='button' id='save' value='Save'></td>
+ <td>Pass:</td><td><input type='text' id='pass' size=50></td>
 </tr>
 </table>
-<div id='msg'>You must hit "Save" the first time to authorize the client</div>
+
+</section>
+
+<div>
+ <h3>Save Settings</h3>
+ <p>
+  <input type='button' id='save' value='Save'></td>
+ </p>
+ <div id='msg'>You must hit "Save" the first time to authorize the client</div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </body>
 </html>
