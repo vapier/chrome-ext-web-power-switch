@@ -37,8 +37,15 @@ function update_settings() {
 	});
 
 	msg.timeout = setTimeout(function() {
-		msg.innerText = '';
+		// Can't leave this blank or Chrome will resize the options page.
+		msg.innerHTML = '&nbsp;';
 	}, 5000);
+}
+
+function keydown(e) {
+	if (e.key == 'Enter') {
+		update_settings();
+	}
 }
 
 window.onload = function() {
@@ -49,6 +56,7 @@ window.onload = function() {
 		settings_keys.forEach(function(key) {
 			var field = document.getElementById(key);
 			field.value = settings[key] || settings_defaults[key];
+			field.onkeydown = keydown;
 		});
 	});
 };

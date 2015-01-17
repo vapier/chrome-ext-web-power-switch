@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "minimum_chrome_version": "22",
+  "minimum_chrome_version": "41",
   "name": "Web Power Switch Manager",
-  "version": "2.3",
+  "version": "3.0",
   "description": "Quickly control Web Power Switches",
   "icons": {
     "128": "images/outlet-128x128.png"
@@ -15,7 +15,10 @@
     "default_title": "Control Your Switch",
     "default_popup": "popup.html"
   },
-  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "permissions": [
     "storage"
   ],

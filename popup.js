@@ -14,8 +14,11 @@ function fetchpage(url, callback) {
 					callback(xhr, state);
 				} else {
 					xhr.setstatus = true;
-					setstatus('Could not connect;<br>check your ' +
-					          '<a href="' + chrome.extension.getURL('options.html') + '" target=_blank>settings</a>');
+					setstatus(
+						'Could not connect;<br>check your ' +
+						'<a id="open-settings" href="">settings</a>'
+					);
+					document.getElementById('open-settings').onclick = open_settings_page;
 					console.log('connect error', state);
 				}
 			}
@@ -161,6 +164,10 @@ function setstatus(msg) {
 	status.style.position   = msg ? '' : 'absolute';
 }
 
+function open_settings_page() {
+	chrome.runtime.openOptionsPage();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	storage.get(settings_keys, function(settings) {
 		url_base = settings['url'] || settings_defaults['url'];
@@ -174,10 +181,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			} else {
 				setstatus(
 					'Missing permissions;<br>please visit the ' +
-					'<a href="' + chrome.extension.getURL('options.html') + '" target=_blank>settings page</a>' +
+					'<a id="open-settings" href="">settings page</a>' +
 					'<br>to grant access.<br>' +
 					'<center><input id=retry type=submit value=Retry></center>'
 				);
+				document.getElementById('open-settings').onclick = open_settings_page;
 				// Work around http://crbug.com/125706.
 				document.getElementById('retry').onclick = function() {
 					chrome.permissions.request({origins: [url_base + '/*']});
