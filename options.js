@@ -48,6 +48,13 @@ function keydown(e) {
 	}
 }
 
+function toggle_visible_pass() {
+	const ele = document.getElementById('pass');
+	ele.type = (ele.type == 'password') ? 'text' : 'password';
+	// Disable form submission.
+	return false;
+}
+
 window.onload = function() {
 	storage.get(settings_keys, function(settings) {
 		var field = document.getElementById('save');
@@ -59,4 +66,5 @@ window.onload = function() {
 			field.onkeydown = keydown;
 		});
 	});
+	document.getElementById('show-pass').onclick = toggle_visible_pass;
 };
