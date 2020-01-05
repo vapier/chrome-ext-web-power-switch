@@ -12,12 +12,19 @@ esac
 
 json_value() {
   local key=$1
-  sed -n -r \
-    -e '/^[[:space:]]*"'"${key}"'"/s|.*:[[:space:]]*"([^"]*)",?$|\1|p' \
-    manifest.json
+  python -c '
+import json, os, sys
+path, key = sys.argv[1:]
+with open(path) as fp:
+  data = json.load(fp)
+print(data[key])
+' "manifest.json" "${key}"
 }
 
-PN=$(json_value name | sed 's:[[:space:]]:_:g' | tr '[:upper:]' '[:lower:]')
+PN=$(json_value name | sed 's:[[:space:]/]:_:g' | tr '[:upper:]' '[:lower:]')
+if [[ ${PN} == "__msg_name__" ]] ; then
+  PN=$(basename "$(pwd)")
+fi
 PV=$(json_value version)
 rev=${1:-0}
 PVR="${PV}.${rev}"
@@ -34,13 +41,20 @@ cp Makefile manifest.files manifest.json "${P}/"
 
 make -C "${P}" -j {css,js}-min
 while read line ; do
-	mv "${line}.min" "${line}"
-done < <(find "${P}" -name '*.js' -o -name '*.css')
+  mv "${line}" "${line%.min}"
+done < <(find "${P}" -name '*.min')
 rm "${P}"/{manifest.files,Makefile}
 
-sed -i \
-  -e '/"version"/s:"[^"]*",:"'${PVR}'",:' \
-  "${P}/manifest.json"
+python -c '
+import json, os, sys
+path, ver = sys.argv[1:]
+with open(path) as fp:
+  data = json.load(fp)
+data.pop("key", None)
+data["version"] = ver
+with open(path, "w") as fp:
+  json.dump(data, fp, separators=(",", ":"))
+' "${P}/manifest.json" "${PVR}"
 
 zip="${P}.zip"
 rm -f "${zip}"
