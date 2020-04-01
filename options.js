@@ -1,4 +1,4 @@
-// Written by Mike Frysinger <vapier@gmail.com>.  Released into the public domain.  Suck it.
+// Written by Mike Frysinger <vapier@gmail.com>.  Released into the public domain.
 
 function update_settings() {
 	var url = document.getElementById('url').value + '/*';

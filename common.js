@@ -1,4 +1,4 @@
-// Written by Mike Frysinger <vapier@gmail.com>.  Released into the public domain.  Suck it.
+// Written by Mike Frysinger <vapier@gmail.com>.  Released into the public domain.
 
 var storage = chrome.storage.sync;
 
