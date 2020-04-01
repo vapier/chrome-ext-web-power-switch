@@ -43,19 +43,35 @@ function fetchpage(url, callback) {
 }
 
 function onoff(o) {
-	return o.toUpperCase() === 'ON' ? 'OFF' : 'ON';
+	const data = o.toUpperCase();
+	switch (data) {
+	case 'OFF':
+		return 'ON';
+	case 'ON':
+		return 'OFF';
+	default:
+		// For example, cycle uses CCL.
+		return data;
+	}
 }
 
 function toggleit(button) {
-	var outlet_num = button.id;
+	const outlet_num = button.id.split(':')[0];
 	var old_status = button.data;
 	var new_status = onoff(button.data);
 	var url = 'outlet?' + outlet_num + '=' + new_status;
 
+	if (!button.id.endsWith('cycle')) {
+		const cycler = document.getElementById(`${button.id}:cycle`);
+		cycler.style.display = new_status === 'ON' ? 'block' : 'none';
+	}
+
 	fetchpage(url, function(xhr, state) {
 		console.log('switch ' + outlet_num + ': ' + old_status + ' -> ' + new_status);
-		button.value = 'Switch ' + old_status;
-		button.data = new_status;
+		if (!button.id.endsWith('cycle')) {
+			button.value = 'Switch ' + old_status;
+			button.data = new_status;
+		}
 	});
 }
 function toggle() {
@@ -110,21 +126,11 @@ function initpopup(xhr, state) {
 
 		row = tbl.insertRow(-1);
 		cell = row.insertCell(-1);
-		cell.colSpan = 2;
+		cell.colSpan = 10;
 		cell.align = 'center';
 		cell.innerText = controller_name.slice(12);
 		cell.innerHTML = '<a href="' + url_base + '" target="_blank">' + cell.innerHTML + '</a>'
 	}
-
-	/*
-		<tr bgcolor="#F4F4F4"><td align=center>1</td>
-		<td>Outlet 1</td><td>
-		<b><font color=red>OFF</font></b></td><td>
-		<a  href=outlet?1=ON>Switch ON</a>
-		</td><td>
-		<!-- <a  href=outlet?1=CCL>Cycle</a> -->
-		</td></tr>
-	*/
 
 	var tr, trs = state.currentTarget.responseXML.querySelectorAll('tr');
 	for (var i = 0; tr = trs[i]; ++i) {
@@ -150,6 +156,21 @@ function initpopup(xhr, state) {
 		button.value = new_status;
 		button.data = current_status;
 		button.onclick = confirmable ? toggle_confirm : toggle;
+		cell.appendChild(button);
+
+		// The switch only allows cycling when it's on.
+		cell = row.insertCell(-1);
+		button = document.createElement('input');
+		button.type = 'button';
+		button.id = `${outlet_num}:cycle`;
+		button.value = '🗘';
+		button.data = 'CCL';
+		button.title = 'Power cycle';
+		button.onclick = confirmable ? toggle_confirm : toggle;
+		if (current_status.toUpperCase() === 'OFF') {
+			button.style.display = 'none';
+		}
+		button.style.fontSize = 'smaller';
 		cell.appendChild(button);
 	}
 
