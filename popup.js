@@ -95,8 +95,6 @@ function toggle_confirm() {
 	}, 5000);
 }
 
-function trim(str) {
-	return str.replace(/^\s+|\s+$/, '');
 }
 
 function initpopup(xhr, state) {
@@ -120,7 +118,7 @@ function initpopup(xhr, state) {
 		if (th.bgColor != '#DDDDFF')
 			continue;
 
-		var controller_name = trim(th.innerText);
+		var controller_name = th.innerText.trim();
 		if (controller_name.slice(0, 12) != 'Controller: ')
 			continue;
 
@@ -137,10 +135,10 @@ function initpopup(xhr, state) {
 		if (tr.bgColor != '#F4F4F4')
 			continue;
 
-		var outlet_num     = trim(tr.children[0].innerText);
-		var outlet_name    = trim(tr.children[1].innerText);
-		var current_status = trim(tr.children[2].innerText);
-		var new_status     = trim(tr.children[3].innerText);
+		var outlet_num     = tr.children[0].innerText.trim();
+		var outlet_name    = tr.children[1].innerText.trim();
+		var current_status = tr.children[2].innerText.trim();
+		var new_status     = tr.children[3].innerText.trim();
 		var confirmable    = tr.children[3].children[0].hasAttribute('onclick');
 
 		row = tbl.insertRow(-1);
