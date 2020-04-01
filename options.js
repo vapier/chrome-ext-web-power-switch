@@ -55,14 +55,40 @@ function toggle_visible_pass() {
 	return false;
 }
 
+function theme_select(theme, init) {
+	const theme_system = $('#theme-system');
+	const theme_light = $('#theme-light');
+	const theme_dark = $('#theme-dark');
+
+	theme_system.className = theme == 'system' ? 'selected' : '';
+	theme_light.className = theme == 'light' ? 'selected' : '';
+	theme_dark.className = theme == 'dark' ? 'selected' : '';
+
+	if (init) {
+		theme_system.onclick = theme_click;
+		theme_light.onclick = theme_click;
+		theme_dark.onclick = theme_click;
+	}
+}
+
+function theme_click() {
+	const theme = this.textContent.toLowerCase();
+	theme_select(theme);
+	storage.set({theme});
+}
+
 window.onload = function() {
-	storage.get(settings_keys, function(settings) {
+	storage.get(settings_keys, function(settings_storage) {
+		const settings = Object.assign({}, settings_defaults, settings_storage);
+
+		theme_select(settings['theme'], true);
+
 		var field = document.getElementById('save');
 		field.onclick = update_settings;
 
 		settings_keys.forEach(function(key) {
 			var field = document.getElementById(key);
-			field.value = settings[key] || settings_defaults[key];
+			field.value = settings[key];
 			field.onkeydown = keydown;
 		});
 	});

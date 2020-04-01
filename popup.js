@@ -42,6 +42,8 @@ function fetchpage(url, callback) {
 	}
 }
 
+function get_css_var(key) { return getComputedStyle(document.documentElement).getPropertyValue(`--${key}`); }
+
 function onoff(o) {
 	const data = o.toUpperCase();
 	switch (data) {
@@ -95,6 +97,13 @@ function toggle_confirm() {
 	}, 5000);
 }
 
+/* Toggle the selected theme. */
+function toggle_theme() {
+	const theme = get_css_var('theme') == 'light' ? 'dark' : 'light';
+	const css = $('link#theme-override');
+	css.href = `css/${theme}.css`;
+	storage.set({theme});
+	return false;
 }
 
 function initpopup(xhr, state) {
@@ -126,8 +135,17 @@ function initpopup(xhr, state) {
 		cell = row.insertCell(-1);
 		cell.colSpan = 10;
 		cell.align = 'center';
-		cell.innerText = controller_name.slice(12);
-		cell.innerHTML = '<a href="' + url_base + '" target="_blank">' + cell.innerHTML + '</a>'
+
+		const a = document.createElement('a');
+		a.href = url_base;
+		a.target = '_blank';
+		a.text = controller_name.slice(12).trim();
+		cell.appendChild(a);
+
+		const button = document.createElement('button');
+		button.name = 'theme';
+		button.onclick = toggle_theme;
+		cell.appendChild(button);
 	}
 
 	var tr, trs = state.currentTarget.responseXML.querySelectorAll('tr');
@@ -188,10 +206,11 @@ function open_settings_page() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	storage.get(settings_keys, function(settings) {
-		url_base = settings['url'] || settings_defaults['url'];
-		user = settings['user'] || settings_defaults['user'];
-		pass = settings['pass'] || settings_defaults['pass'];
+	storage.get(settings_keys, function(settings_storage) {
+		const settings = Object.assign({}, settings_defaults, settings_storage);
+		url_base = settings['url'];
+		user = settings['user'];
+		pass = settings['pass'];
 		chrome.permissions.contains({
 			origins: [url_base + '/*']
 		}, function(granted) {

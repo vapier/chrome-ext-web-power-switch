@@ -7,7 +7,10 @@
 <title>Web Power Switch Manager Options</title>
 <script src='common.js'></script>
 <script src='options.js'></script>
-<style>body { padding: 0px; }</style>
+<style>
+body { padding: 0px; }
+button.selected { filter: invert(1); }
+</style>
 </head>
 
 <body>
@@ -26,6 +29,15 @@
  <td>Pass:</td>
  <td><input type='password' id='pass' size=30
             autocapitalize='none' autocorrect='off' spellcheck='false'>&nbsp;<button id='show-pass'>👁</button></td>
+</tr>
+<tr>
+ <td>Theme:</td>
+ <td>
+  <input type='text' id='theme' hidden>
+  <button id='theme-light'>Light</button>
+  <button id='theme-system'>System</button>
+  <button id='theme-dark'>Dark</button>
+ </td>
 </tr>
 </table>
 
